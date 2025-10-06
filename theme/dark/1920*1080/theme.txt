@@ -1,0 +1,47 @@
+# 全局属性
+title-text: ""
+desktop-image: "background.png"
+desktop-color: "#000000"
+desktop-image-scale-method: "fitheight"
+desktop-image-h-align: "center"
+terminal-box: "patterns/terminal_box_*.png"
+terminal-left: "0"
+terminal-top: "0"
+terminal-width: "100%"
+terminal-height: "100%"
+terminal-border: "0"
+
+# 启动菜单
++ boot_menu {
+    left = 48%
+    top = 23%
+    height = 62%
+    width = 42%
+    item_font = "HarmonyOS Sans Bold 32"
+    item_color = "#ffffff"
+    selected_item_color = "#1fdbd5"
+    item_height = 80
+    item_spacing = 12
+    item_icon_space = 60
+    item_padding = 20
+    icon_width = 64
+    icon_height = 64
+}
+
+# 进度条
++ progress_bar {
+  left = 48%
+  top = 84%
+  width = 40%
+  height = 3%
+
+  id = "__timeout__"
+  text = "@TIMEOUT_NOTIFICATION_SHORT@"
+  font = "HarmonyOS Sans Regular 24"
+  text_color = "#000000ff"
+  border_color = "white"
+  fg_color = "#1fdbd5"
+  bg_color = "#dadadaff"
+  border_width = 1
+  padding = 2
+}

@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # this is a install script for Feather-P/asus-tuf-grub-theme grub theme
-# author: Feather-P
-# date: Aug 30 2025
 
 # 设置变量
 THEMENAME="asus-tuf-grub-theme"
@@ -53,18 +51,20 @@ mkdir -p "$GRUBTHEMESDIR/$THEMENAME"
 # 让用户选择主题
 echo ""
 echo "请选择要使用的主题:"
-echo "1) 深色主题 (dark)"
-echo "2) 浅色主题 (light)"
-read -p "请输入选项 [1-2]: " theme_choice
+echo "[1] 深色主题 (dark)"
+echo "[2] 浅色主题 (light)"
+read -n 1 -p "请输入选项 [1-2]: " THEME_CHOICE
 
 # 根据用户选择设置主题
-case $theme_choice in
+case $THEME_CHOICE in
     1)
         SELECTED_THEME="dark"
+        echo
         echo "已选择深色主题"
         ;;
     2)
         SELECTED_THEME="light"
+        echo
         echo "已选择浅色主题"
         ;;
     *)
@@ -73,25 +73,50 @@ case $theme_choice in
         ;;
 esac
 
+# 选择分辨率
+echo ""
+echo "请选择要安装的背景图像分辨率:"
+echo "[1] 1920*1080(天选1/2)"
+echo "[2] 2560*1440(天选3/4/5)"
+echo "[3] 2560*1600(天选6)"
+read -n 1 -p "请输入选项[1-3] " RESOLUTION_CHOICE
+
+# 根据用户选择设置分辨率
+case $RESOLUTION_CHOICE in
+    1)
+        SELECTED_RESOLUTION="1920*1080"
+        echo
+        echo "已选择1920*1080分辨率"
+        ;;
+    2)
+        SELECTED_RESOLUTION="2560*1440"
+        echo
+        echo "已选择2560*1440分辨率"
+        ;;
+    3)
+        SELECTED_RESOLUTION="2560*1600"
+        echo "已选择2560*1600分辨率"
+        ;;
+    *)
+        echo "无效选项，将使用默认1920*1080分辨率"
+        SELECTED_RESOLUTION="1920*1080"
+        ;;
+esac
+
 # 复制主题文件
 echo "复制主题文件..."
-if [ "$SELECTED_THEME" = "dark" ]; then
-    echo "复制深色主题文件..."
-    if ! cp -r theme/dark/* "$GRUBTHEMESDIR/$THEMENAME/"; then
-        echo "错误: 复制深色主题文件失败"
+for item in "theme/$SELECTED_THEME/$SELECTED_RESOLUTION"/*; do
+    if ! cp -r "$item" "$GRUBTHEMESDIR/$THEMENAME/"; then
+        echo "错误: 复制主题文件失败"
         exit 1
     fi
-else
-    echo "复制浅色主题文件..."
-    if ! cp -r theme/light/* "$GRUBTHEMESDIR/$THEMENAME/"; then
-        echo "错误: 复制浅色主题文件失败"
-        exit 1
-    fi
-fi
+done
 
-# 复制通用字体文件
-echo "复制通用字体文件..."
+# 复制通用文件
+echo "复制通用文件开始:"
 
+# 复制字体文件
+echo "复制字体文件..."
 if ! cp -r theme/common/fonts/* "$GRUBTHEMESDIR/$THEMENAME/"; then
     echo "错误: 复制字体文件失败"
     exit 1
@@ -101,6 +126,13 @@ fi
 echo "复制图标文件..."
 if ! cp -r theme/common/icons "$GRUBTHEMESDIR/$THEMENAME/"; then
     echo "错误: 复制图标文件失败"
+    exit 1
+fi
+
+# 复制样式文件
+echo "复制样式文件..."
+if ! cp -r theme/common/patterns "$GRUBTHEMESDIR/$THEMENAME/"; then
+    echo "错误: 复制样式文件失败"
     exit 1
 fi
 
@@ -148,6 +180,6 @@ fi
 
 echo ""
 echo "GRUB主题安装完成！"
-echo "已应用 天选 $SELECTED_THEME 主题"
-echo "主题路径: $GRUBTHEMESDIR/$THEMENAME/theme.txt"
+echo "已应用 天选 $SELECTED_THEME $SELECTED_RESOLUTION 主题"
+echo "主题路径: $GRUBTHEMESDIR/$THEMENAME"
 echo "如需切换主题，请重新运行此脚本"
